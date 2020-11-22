@@ -42,12 +42,12 @@ export default function Login({ navigation }) {
       <View style={[ma2, styles.container]}>
         <Card style={styles.cardWrapper}>
           <Image
-            source={require('~/assets/fast-food.png')}
+            source={require('~/assets/chef-hat.png')}
             style={styles.cardHeaderImage}
           />
           <Card.Content>
             <View style={{ alignItems: 'center' }}>
-              <Text style={[my2, material.display1]}>Order Man</Text>
+              <Text style={[my2, material.display1]}>Tariflerim</Text>
               <Text style={[material.body2, styles.errorText]}>
                 {errorMessage}
               </Text>
@@ -64,7 +64,7 @@ export default function Login({ navigation }) {
             <TextInput
               style={[my1, { flexDrection: 'row' }]}
               mode="outlined"
-              label="Password"
+              label="Şifre"
               value={credentials.password}
               secureTextEntry
               onChangeText={password =>
@@ -78,11 +78,11 @@ export default function Login({ navigation }) {
               style={my1}
               mode="contained"
               onPress={() => login()}>
-              Login
+              Giriş Yap
             </Button>
 
             <Button style={my1} onPress={() => navigation.navigate('Register')}>
-              Register
+              Kayıt Ol
             </Button>
           </Card.Content>
         </Card>

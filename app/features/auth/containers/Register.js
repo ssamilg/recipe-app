@@ -52,12 +52,12 @@ export default function Register({ navigation }) {
       <View style={[ma2, styles.container]}>
         <Card style={styles.cardWrapper}>
           <Image
-            source={require('~/assets/fast-food.png')}
+            source={require('~/assets/chef-hat.png')}
             style={styles.cardHeaderImage}
           />
           <Card.Content>
             <View style={{ alignItems: 'center' }}>
-              <Text style={[my2, material.display1]}>Order Man</Text>
+              {/* <Text style={[my2, material.display1]}>Tariflerim</Text> */}
               <Text style={[material.body2, styles.errorText]}>
                 {errorMessage}
               </Text>
@@ -75,12 +75,34 @@ export default function Register({ navigation }) {
             <GpTextInput
               style={[my1]}
               mode="outlined"
-              label="Password"
+              label="Şifre"
               value={credentials.password}
               secureTextEntry
               required
               onChangeText={password =>
                 setCredentials({ ...credentials, password })
+              }
+            />
+
+            <GpTextInput
+              style={[my1]}
+              mode="outlined"
+              label="İsim"
+              value={credentials.name}
+              required
+              onChangeText={name =>
+                setCredentials({ ...credentials, name })
+              }
+            />
+
+            <GpTextInput
+              style={[my1]}
+              mode="outlined"
+              label="Soyisim"
+              value={credentials.surname}
+              required
+              onChangeText={surname =>
+                setCredentials({ ...credentials, surname })
               }
             />
 
@@ -90,10 +112,10 @@ export default function Register({ navigation }) {
               mode="contained"
               disabled={loading}
               onPress={() => register()}>
-              Register
+              Kayıt Ol
             </Button>
             <Button style={my1} onPress={() => navigation.navigate('Login')}>
-              Login
+              Giriş Yap
             </Button>
           </Card.Content>
         </Card>

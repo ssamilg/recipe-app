@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, Dimensions, Image } from 'react-native';
+import { View, Text, Dimensions, Image, ScrollView } from 'react-native';
 import { Button, Card, TextInput, useTheme } from 'react-native-paper';
 import { material } from 'react-native-typography';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
@@ -26,10 +26,11 @@ export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [entries, setEntries] = useState([
     {
-      illustration: 'https://i.imgur.com/UYiroysl.jpg',
+      illustration: 'https://i.imgur.com/UPrs1EWl.jpg',
     },
     {
-      illustration: 'https://i.imgur.com/UPrs1EWl.jpg',
+      illustration: 'https://yemekchefs.com/wp-content/uploads/2020/02/%C4%B0SKENDEER.jpg',
+      title: 'Evde İskender Tarifi'
     },
     {
       illustration: 'https://i.imgur.com/MABUbpDl.jpg',
@@ -58,19 +59,24 @@ export default function Home() {
   const RenderItem = ({ item }) => {
     console.log();
     return (
-      <View style={[ma1, { borderRadius: 15, overflow: 'hidden' }]}>
-        <Image
-          style={{ height: 200, width: '100%', resizeMode: 'stretch' }}
-          source={{
-            uri: item.illustration,
-          }}
-        />
-      </View>
+      <>
+        <View style={[ma1, { borderRadius: 15, overflow: 'hidden' }]}>
+          <Image
+            style={{ height: 200, width: '100%', resizeMode: 'stretch' }}
+            source={{
+              uri: item.illustration,
+            }}
+          />
+        </View>
+        <Text style={[ material.title ]}>
+          { item.title }
+        </Text>
+      </>
     );
   };
 
   return (
-    <View>
+    <ScrollView>
       <LinearGradient colors={['#BDBDBD', '#FFF']} style={[py2]}>
         <Carousel
           ref={carouselRef}
@@ -99,7 +105,7 @@ export default function Home() {
       <View style={[mt6]}>
         <Card style={[px2, py3]} theme={{ roundness: 0 }}>
           <TextInput
-            label="Search restaurant or food"
+            label="Tariflerde ara..."
             right={
               <TextInput.Icon
                 name="magnify"
@@ -126,7 +132,7 @@ export default function Home() {
       </View>
 
       <View style={[mt4]}>
-        <Text style={[mx1, material.display1]}>Latest Orders</Text>
+        <Text style={[mx1, material.display1]}>Beğenilen Tarifler</Text>
         <LatestOrders orders={orders} />
       </View>
       <Button
@@ -136,6 +142,6 @@ export default function Home() {
         onPress={onLogout}>
         Logout
       </Button>
-    </View>
+    </ScrollView>
   );
 }
