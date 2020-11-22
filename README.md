@@ -1,3 +1,0 @@
-# recipe-app
-
-Recipe App
