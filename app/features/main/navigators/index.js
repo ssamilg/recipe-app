@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import HomeFeature from '~/features/home/containers';
+import HomeFeature from '~/features/home/navigators';
 import { StyleSheet } from 'react-native';
 
 const Drawer = createDrawerNavigator();
-
 /* function MenuIcon({ icon, iconType }) {
   const size = 24;
 

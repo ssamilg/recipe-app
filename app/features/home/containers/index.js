@@ -10,17 +10,18 @@ import * as mainActions from '~/features/main/redux/actions';
 import { LatestOrders } from '../components';
 import styles from './styles';
 import { paddings, margins } from '~/config/styles';
+import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const windowWidth = Dimensions.get('window').width;
 const orders = [
   //
 ];
 
-export default function Home() {
+export default function Home({ navigation }) {
   const dispatch = useDispatch();
   const { colors } = useTheme();
   const { py1, py2, px2, py3 } = paddings;
-  const { ma1, my0, mt4, mt6, mx1 } = margins;
+  const { ma1, ma4, my0, mt4, mt6, mx1 } = margins;
   const [loading, setLoading] = useState(false);
   const carouselRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -73,6 +74,10 @@ export default function Home() {
         </Text>
       </>
     );
+  };
+
+  const navigateToNewRecipe = () => {
+    console.log('lul');
   };
 
   return (
@@ -129,6 +134,33 @@ export default function Home() {
             underlineColorAndroid={'rgba(0,0,0,0)'}
           />
         </Card>
+      </View>
+
+      <View
+        style={
+            [mt4], {
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderColor: '#ff0000',
+            borderStyle:'solid'
+          }}>
+        <Button
+          style={[mx1, { flexGrow: 1, justifyContent: 'center', alignItems: 'center' }]}
+          onPress={() => {
+            console.log(navigation);
+            navigation.navigate('NewRecipe')
+          }}
+          mode="contained"
+          disabled={false}
+          loading={false}
+          dark
+          color={colors.notification}
+        >
+          <Text style={material.body2WhiteObject}>Tarif Paylaş </Text>
+          <CommunityIcon color="white" name="plus" size={20}/>
+        </Button>
       </View>
 
       <View style={[mt4]}>

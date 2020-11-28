@@ -37,7 +37,9 @@ function App() {
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator headerMode="none">
         {isLoggedIn ? (
-          <Stack.Screen name="Main" component={Main} />
+          <>
+            <Stack.Screen name="Main" component={Main} />
+          </>
         ) : (
           <>
             <Stack.Screen
