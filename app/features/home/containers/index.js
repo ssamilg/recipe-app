@@ -148,10 +148,7 @@ export default function Home({ navigation }) {
           }}>
         <Button
           style={[mx1, { flexGrow: 1, justifyContent: 'center', alignItems: 'center' }]}
-          onPress={() => {
-            console.log(navigation);
-            navigation.navigate('NewRecipe')
-          }}
+          onPress={() => { navigation.navigate('NewRecipe') }}
           mode="contained"
           disabled={false}
           loading={false}
