@@ -16,6 +16,7 @@ const NewRecipe = ({ navigation }) => {
       recipeTitle,
       photoLink,
       recipeDetails,
+      dateCreated: new Date(),
     };
 
     console.log('LUL');
@@ -24,6 +25,7 @@ const NewRecipe = ({ navigation }) => {
       .add(newRecipe)
       .then(() => {
         console.log('Recipe added!');
+        console.log(newRecipe);
         navigation.navigate('Home')
       })
       .catch((err) => {

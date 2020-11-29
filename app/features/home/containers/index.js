@@ -7,10 +7,11 @@ import auth from '@react-native-firebase/auth';
 import LinearGradient from 'react-native-linear-gradient';
 import { useDispatch } from 'react-redux';
 import * as mainActions from '~/features/main/redux/actions';
-import { LatestOrders } from '../components';
+import { LatestRecipes } from '../components';
 import styles from './styles';
 import { paddings, margins } from '~/config/styles';
 import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import firestore from '@react-native-firebase/firestore';
 
 const windowWidth = Dimensions.get('window').width;
 const orders = [
@@ -21,7 +22,7 @@ export default function Home({ navigation }) {
   const dispatch = useDispatch();
   const { colors } = useTheme();
   const { py1, py2, px2, py3 } = paddings;
-  const { ma1, ma4, my0, mt4, mt6, mx1 } = margins;
+  const { ma1, mb4, my0, mt4, mt6, mx1, my4 } = margins;
   const [loading, setLoading] = useState(false);
   const carouselRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -46,6 +47,7 @@ export default function Home({ navigation }) {
       illustration: 'https://i.imgur.com/lceHsT6l.jpg',
     },
   ]);
+  const [latestRecipes, setLatestRecipe] = React.useState([]);
 
   const onLogout = () => {
     setLoading(true);
@@ -76,9 +78,16 @@ export default function Home({ navigation }) {
     );
   };
 
-  const navigateToNewRecipe = () => {
-    console.log('lul');
-  };
+  const fetchLatestRecipes = async () => {
+    firestore()
+      .collection('Recipes')
+      .limit(5)
+      .orderBy('dateCreated', 'desc')
+      .get()
+      .then((documentSnapshot) => {
+        setLatestRecipe(documentSnapshot.docs.map(doc => doc._data));
+      })
+    };
 
   return (
     <ScrollView>
@@ -160,10 +169,23 @@ export default function Home({ navigation }) {
         </Button>
       </View>
 
-      <View style={[mt4]}>
-        <Text style={[mx1, material.display1]}>Beğenilen Tarifler</Text>
-        <LatestOrders orders={orders} />
+      <View style={[my4]}>
+        <View style={[mx1, { flex: 1, flexDirection: 'row', alignItems: 'center' }]}>
+          <Text style={[mx1, material.display1, { flexGrow: 1 }]}>Beğenilen Tarifler</Text>
+          <CommunityIcon
+            color="black"
+            name="refresh"
+            size={28}
+            style={[mx1]}
+            onPress={() => fetchLatestRecipes()}
+          />
+        </View>
+
+        <View>
+          <LatestRecipes latestRecipes={latestRecipes}/>
+        </View>
       </View>
+
       <Button
         loading={loading}
         icon="logout"

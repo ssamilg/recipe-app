@@ -57,7 +57,7 @@ export default function Login({ navigation }) {
               style={[my1, { flexDrection: 'row' }]}
               mode="outlined"
               label="E-Mail"
-              value={credentials.emial}
+              value={credentials.email}
               onChangeText={email => setCredentials({ ...credentials, email })}
             />
 
