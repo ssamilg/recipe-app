@@ -11,18 +11,9 @@ const RecipeDetails = ({ route }) => {
   const { recipe } = route.params;
   const { py1, pa4, px2, pt10 } = paddings;
   const { ma4, my4, mt4, mr2, mt10 } = margins;
-  const [message, setMessage] = React.useState([]);
-
-  const callbackFunction = (childData) => {
-    console.log('2');
-    this.setMessage(childData);
-  };
 
   return (
     <ScrollView>
-      <Text>
-        {message}
-      </Text>
       <Card
         style={[pa4, ma4]}
       >
@@ -47,7 +38,7 @@ const RecipeDetails = ({ route }) => {
       <View>
         <RecipeComments recipe={recipe}/>
 
-        <NewComment recipe={recipe} callback = {() => {console.log('çç');}}/>
+        <NewComment recipe={recipe}/>
       </View>
 
     </ScrollView>

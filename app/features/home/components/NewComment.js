@@ -34,8 +34,6 @@ const NewComment = ({ recipe }) => {
       })
       .finally(() => {
         setCommentText('');
-        console.log('1');
-        this.props.callback();
       });
   }
 
@@ -62,7 +60,6 @@ const NewComment = ({ recipe }) => {
           onPress={() => shareComment()}
         >
           <Text>Yorumla</Text>
-          {/* <CommunityIcon color="white" name="plus" size={20}/> */}
         </Button>
       </Card>
     </View>
