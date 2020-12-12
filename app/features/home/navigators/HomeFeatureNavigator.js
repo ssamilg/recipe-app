@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 // import AppHeader from '../../main/components/AppHeader';
 import Home from '../containers/index';
 import NewRecipe from '../containers/NewRecipe';
+import RecipeDetails from '../containers/RecipeDetails';
 
 const Stack = createStackNavigator();
 
@@ -26,6 +27,14 @@ function HomeFeatureNavigator() {
         component={NewRecipe}
         options={{
           title: 'New Recipe',
+          showBackButton: false,
+        }}
+      />
+      <Stack.Screen
+        name="RecipeDetails"
+        component={RecipeDetails}
+        options={{
+          title: 'Recipe Details',
           showBackButton: false,
         }}
       />
