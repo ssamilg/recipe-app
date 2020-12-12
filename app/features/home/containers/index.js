@@ -14,9 +14,6 @@ import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import firestore from '@react-native-firebase/firestore';
 
 const windowWidth = Dimensions.get('window').width;
-const orders = [
-  //
-];
 
 export default function Home({ navigation }) {
   const dispatch = useDispatch();
@@ -48,6 +45,7 @@ export default function Home({ navigation }) {
     },
   ]);
   const [latestRecipes, setLatestRecipe] = React.useState([]);
+  fetchLatestRecipes();
 
   const onLogout = () => {
     setLoading(true);
@@ -60,7 +58,6 @@ export default function Home({ navigation }) {
   };
 
   const RenderItem = ({ item }) => {
-    console.log();
     return (
       <>
         <View style={[ma1, { borderRadius: 15, overflow: 'hidden' }]}>
@@ -78,16 +75,33 @@ export default function Home({ navigation }) {
     );
   };
 
-  const fetchLatestRecipes = async () => {
+  async function fetchLatestRecipes() {
     firestore()
       .collection('Recipes')
       .limit(5)
       .orderBy('dateCreated', 'desc')
       .get()
-      .then((documentSnapshot) => {
-        setLatestRecipe(documentSnapshot.docs.map(doc => doc._data));
+      .then((querySnapshot ) => {
+  
+        const tempArray = [];
+
+        querySnapshot.forEach(documentSnapshot => {
+          const recipe = {
+            id: documentSnapshot.id,
+            ...documentSnapshot.data(),
+          }
+
+          tempArray.push(recipe);
+        });
+
+        setLatestRecipe(tempArray);
       })
-    };
+  };
+  
+  const props = {
+    latestRecipes,
+    navigation,
+  };
 
   return (
     <ScrollView>
@@ -182,7 +196,7 @@ export default function Home({ navigation }) {
         </View>
 
         <View>
-          <LatestRecipes latestRecipes={latestRecipes}/>
+          <LatestRecipes {...props}/>
         </View>
       </View>
 

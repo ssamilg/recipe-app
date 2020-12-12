@@ -9,7 +9,6 @@ const initialState = {
 
 export const mainReducer = createReducer(initialState, {
   [types.SET_USER_CREDENTIALS](draft, action) {
-    console.log(action);
     draft.user = action.user;
   },
   [types.SET_IS_NEW_USER](draft, action) {

@@ -3,6 +3,7 @@ import { StyleSheet, View, Text } from 'react-native';
 import { Card, TextInput, Button } from 'react-native-paper';
 import { paddings, margins } from '~/config/styles';
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 const NewRecipe = ({ navigation }) => {
   const { py1, pa4, px2, py3 } = paddings;
@@ -10,6 +11,7 @@ const NewRecipe = ({ navigation }) => {
   const [photoLink, setPhotoLink] = React.useState('');
   const [recipeTitle, setRecipeTitle] = React.useState('');
   const [recipeDetails, setRecipeDetails] = React.useState('');
+  const { email, uid } = auth().currentUser._user;
 
   const shareRecipe = () => {
     const newRecipe = {
@@ -17,15 +19,14 @@ const NewRecipe = ({ navigation }) => {
       photoLink,
       recipeDetails,
       dateCreated: new Date(),
+      user: { uid, email },
     };
 
-    console.log('LUL');
     firestore()
       .collection('Recipes')
       .add(newRecipe)
       .then(() => {
         console.log('Recipe added!');
-        console.log(newRecipe);
         navigation.navigate('Home')
       })
       .catch((err) => {
@@ -39,27 +40,28 @@ const NewRecipe = ({ navigation }) => {
         style={[pa4, ma4]}
       >
         <Card.Title title="Yeni Tarif"/>
-          <TextInput
-            label="Tarif Başlığı"
-            value={recipeTitle}
-            onChangeText={recipeTitle => setRecipeTitle(recipeTitle)}
-          />
 
-          <TextInput
-            label="Fotoğraf Linki"
-            value={photoLink}
-            onChangeText={photoLink => setPhotoLink(photoLink)}
-            style={[mt4]}
-          />
+        <TextInput
+          label="Tarif Başlığı"
+          value={recipeTitle}
+          onChangeText={recipeTitle => setRecipeTitle(recipeTitle)}
+        />
 
-          <TextInput
-            label="Tarif Detayı"
-            value={recipeDetails}
-            onChangeText={recipeDetails => setRecipeDetails(recipeDetails)}
-            numberOfLines={12}
-            multiline
-            style={[mt4]}
-          />
+        <TextInput
+          label="Fotoğraf Linki"
+          value={photoLink}
+          onChangeText={photoLink => setPhotoLink(photoLink)}
+          style={[mt4]}
+        />
+
+        <TextInput
+          label="Tarif Detayı"
+          value={recipeDetails}
+          onChangeText={recipeDetails => setRecipeDetails(recipeDetails)}
+          numberOfLines={12}
+          multiline
+          style={[mt4]}
+        />
 
         <Button
           style={[mt4, { flexGrow: 1, justifyContent: 'center', alignItems: 'center' }]}
