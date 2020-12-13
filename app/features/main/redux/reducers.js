@@ -5,6 +5,7 @@ const initialState = {
   user: {},
   isNewUser: false,
   isLoggedIn: false,
+  recipe: {},
 };
 
 export const mainReducer = createReducer(initialState, {
@@ -20,5 +21,8 @@ export const mainReducer = createReducer(initialState, {
   [types.ON_LOGOUT](draft, action) {
     draft.isLoggedIn = false;
     draft.user = [];
+  },
+  [types.REFRESH_RECIPE](draft, action) {
+    draft.recipe = action.payload;
   },
 });
