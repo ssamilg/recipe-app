@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import { Card, TextInput, Button } from 'react-native-paper';
 import { paddings, margins } from '~/config/styles';
 import firestore from '@react-native-firebase/firestore';
@@ -20,6 +20,7 @@ const NewRecipe = ({ navigation }) => {
       recipeDetails,
       dateCreated: new Date(),
       user: { uid, email },
+      comments: [],
     };
 
     firestore()
@@ -35,7 +36,7 @@ const NewRecipe = ({ navigation }) => {
   }
 
   return (
-    <View>
+    <ScrollView>
       <Card
         style={[pa4, ma4]}
       >
@@ -76,7 +77,7 @@ const NewRecipe = ({ navigation }) => {
           {/* <CommunityIcon color="white" name="plus" size={20}/> */}
         </Button>
       </Card>
-    </View>
+    </ScrollView>
   );
 };
 
