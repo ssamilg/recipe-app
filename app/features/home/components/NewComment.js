@@ -4,8 +4,12 @@ import { Card, TextInput, Button } from 'react-native-paper';
 import { paddings, margins } from '~/config/styles';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import { useDispatch } from 'react-redux';
+import { refreshRecipe } from '~/features/main/redux/actions';
+import { refreshRecipeById } from '../../main/redux/thunkActions';
 
 const NewComment = ({ recipe }) => {
+  const dispatch = useDispatch();
   const { py1, pa4, px2, py3 } = paddings;
   const { ma4, my0, mt4, mt6, mx1 } = margins;
   const [commentText, setCommentText] = React.useState('');
@@ -19,7 +23,7 @@ const NewComment = ({ recipe }) => {
       user: { uid, email },
       recipeId: recipe.id,
     };
-
+    
     firestore()
       .collection('Recipes')
       .doc(recipe.id)
@@ -34,6 +38,10 @@ const NewComment = ({ recipe }) => {
       })
       .finally(() => {
         setCommentText('');
+        dispatch(refreshRecipeById(recipe.id))
+          .then((recipe) => {
+            dispatch(refreshRecipe(recipe._data));
+          });
       });
   }
 
