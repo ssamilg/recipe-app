@@ -17,6 +17,10 @@ export default function Register({ navigation }) {
     email: '',
     password: '',
   });
+  const [userData, setUserData] = useState({
+    name: '',
+    surname: '',
+  });
   const { ma2, my2, my1 } = margins;
 
   const register = () => {
@@ -88,10 +92,10 @@ export default function Register({ navigation }) {
               style={[my1]}
               mode="outlined"
               label="İsim"
-              value={credentials.name}
+              value={userData.name}
               required
               onChangeText={name =>
-                setCredentials({ ...credentials, name })
+                setUserData({ ...userData, name })
               }
             />
 
@@ -99,10 +103,10 @@ export default function Register({ navigation }) {
               style={[my1]}
               mode="outlined"
               label="Soyisim"
-              value={credentials.surname}
+              value={userData.surname}
               required
               onChangeText={surname =>
-                setCredentials({ ...credentials, surname })
+                setUserData({ ...userData, surname })
               }
             />
 
