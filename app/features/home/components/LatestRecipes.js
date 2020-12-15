@@ -28,24 +28,35 @@ const LatestRecipes = (props) => {
       .collection('Recipes')
       .doc(recipe.id)
       .update({
-        likes: firestore.FieldValue.increment(1)
+        likes: firestore.FieldValue.increment(1),
+        usersLiked: firestore.FieldValue.arrayUnion(uid)
       })
       .then(() => {
         console.log('Recipe liked!');
+        recipe.likes += 1;
       })
       .catch((err) => {
         console.log(err);
-      })
-      .finally(() => {
-        recipe.likes += 1;
-  
-        firestore()
+      });
+    } else if (isLiked(recipe)) {
+      firestore()
+      .collection('Recipes')
+      .doc(recipe.id)
+      .get()
+        .then((querySnapshot) => {
+          const tempArray = querySnapshot._data.usersLiked.filter(u => u !== uid);
+
+          firestore()
           .collection('Recipes')
           .doc(recipe.id)
           .update({
-            usersLiked: firestore.FieldValue.arrayUnion(uid)
-          });
-      });
+            usersLiked: tempArray,
+            likes: firestore.FieldValue.increment(-1),
+          })
+            .then(() => {
+              recipe.likes -= 1;
+            });
+        })
     }
   };
 
