@@ -18,13 +18,14 @@ const windowWidth = Dimensions.get('window').width;
 export default function Home({ navigation }) {
   const dispatch = useDispatch();
   const { colors } = useTheme();
-  const { py1, py2, px2, py3 } = paddings;
-  const { ma1, mb4, my0, mt4, mt6, mx1, my4 } = margins;
+  const { py1, pt2, pa2 } = paddings;
+  const { ma1, ma2, my0, mt4, mt6, mx1, my4 } = margins;
   const [loading, setLoading] = useState(false);
   const carouselRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [entries, setEntries] = React.useState([]);
   const [latestRecipes, setLatestRecipe] = React.useState([]);
+  const [todaysRecipe, setTodaysRecipe] = React.useState([]);
   fetchLatestRecipes();
 
   const onLogout = () => {
@@ -57,7 +58,7 @@ export default function Home({ navigation }) {
       </>
     );
   };
-
+ 
   async function fetchLatestRecipes() {
     firestore()
       .collection('Recipes')
@@ -89,6 +90,27 @@ export default function Home({ navigation }) {
 
         // setEntries(slider);
       })
+      .finally(() => {
+        fetchTodaysRecipe();
+      });
+  };
+
+  async function fetchTodaysRecipe() {
+    firestore()
+      .collection('Recipes')
+      .limit(1)
+      .orderBy('likes', 'desc')
+      .get()
+      .then((querySnapshot ) => {
+        querySnapshot.forEach(documentSnapshot => {
+          const recipe = {
+            id: documentSnapshot.id,
+            ...documentSnapshot.data(),
+          }
+
+          setTodaysRecipe(recipe);
+        });
+      })
   };
   
   const props = {
@@ -98,7 +120,7 @@ export default function Home({ navigation }) {
 
   return (
     <ScrollView>
-      <LinearGradient colors={['#BDBDBD', '#FFF']} style={[py2]}>
+      <LinearGradient colors={['#BDBDBD', '#FFF']} style={[pt2]}>
         <Carousel
           ref={carouselRef}
           data={latestRecipes}
@@ -124,30 +146,11 @@ export default function Home({ navigation }) {
       </LinearGradient>
 
       <View style={[mt6]}>
-        <Card style={[px2, py3]} theme={{ roundness: 0 }}>
-          <TextInput
-            label="Tariflerde ara..."
-            right={
-              <TextInput.Icon
-                name="magnify"
-                color={colors.primary}
-                forceTextInputFocus={false}
-              />
-            }
-            theme={{
-              colors: { underlineColor: 'transparent' },
-            }}
-            style={{
-              backgroundColor: 'white',
-              borderBottomColor: 'white',
-              viewStyle: {
-                borderWidth: 0,
-              },
-              underlineColor: 'transparent',
-            }}
-            selectionColor="transparent"
-            underlineColor="transparent"
-            underlineColorAndroid={'rgba(0,0,0,0)'}
+        <Card style={[pa2, ma2, { borderWidth: 2, borderColor: '#F48FB1', borderStyle: 'solid' } ]}>
+          <Card.Title title="Günün Tarifi" subtitle={todaysRecipe.recipeTitle}/>
+          <Card.Cover
+            style={{ height: 100, width: '100%', resizeMode: 'contain' }}
+            source={{ uri: todaysRecipe.photoLink }}
           />
         </Card>
       </View>
