@@ -23,27 +23,7 @@ export default function Home({ navigation }) {
   const [loading, setLoading] = useState(false);
   const carouselRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [entries, setEntries] = useState([
-    {
-      illustration: 'https://i.imgur.com/UPrs1EWl.jpg',
-    },
-    {
-      illustration: 'https://yemekchefs.com/wp-content/uploads/2020/02/%C4%B0SKENDEER.jpg',
-      title: 'Evde İskender Tarifi'
-    },
-    {
-      illustration: 'https://i.imgur.com/MABUbpDl.jpg',
-    },
-    {
-      illustration: 'https://i.imgur.com/KZsmUi2l.jpg',
-    },
-    {
-      illustration: 'https://i.imgur.com/2nCt3Sbl.jpg',
-    },
-    {
-      illustration: 'https://i.imgur.com/lceHsT6l.jpg',
-    },
-  ]);
+  const [entries, setEntries] = React.useState([]);
   const [latestRecipes, setLatestRecipe] = React.useState([]);
   fetchLatestRecipes();
 
@@ -64,13 +44,16 @@ export default function Home({ navigation }) {
           <Image
             style={{ height: 200, width: '100%', resizeMode: 'stretch' }}
             source={{
-              uri: item.illustration,
+              uri: item.photoLink,
             }}
           />
         </View>
-        <Text style={[ material.title ]}>
-          { item.title }
-        </Text>
+
+        <View style={[ma1, { flex: 1, flexDirection: 'row', justifyContent: 'center' }]}>
+          <Text style={[ material.title ]}>
+            { item.recipeTitle }
+          </Text>
+        </View>
       </>
     );
   };
@@ -78,7 +61,7 @@ export default function Home({ navigation }) {
   async function fetchLatestRecipes() {
     firestore()
       .collection('Recipes')
-      .limit(5)
+      .limit(10)
       .orderBy('dateCreated', 'desc')
       .get()
       .then((querySnapshot ) => {
@@ -95,6 +78,16 @@ export default function Home({ navigation }) {
         });
 
         setLatestRecipe(tempArray);
+        // const slider = tempArray.map((item) => {
+        //   const newItem = {
+        //     title: item.recipeTitle,
+        //     photo: item.photoLink,
+        //   }
+
+        //   return newItem;
+        // });
+
+        // setEntries(slider);
       })
   };
   
@@ -108,14 +101,14 @@ export default function Home({ navigation }) {
       <LinearGradient colors={['#BDBDBD', '#FFF']} style={[py2]}>
         <Carousel
           ref={carouselRef}
-          data={entries}
+          data={latestRecipes}
           renderItem={RenderItem}
           sliderWidth={windowWidth}
           itemWidth={windowWidth - 64}
           onSnapToItem={index => setActiveIndex(index)}
         />
         <Pagination
-          dotsLength={entries.length}
+          dotsLength={latestRecipes.length}
           activeDotIndex={activeIndex}
           containerStyle={[py1, my0]}
           dotStyle={{
