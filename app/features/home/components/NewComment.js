@@ -59,7 +59,7 @@ const NewComment = ({ recipe }) => {
         />
 
         <Button
-          style={[mt4, { flexGrow: 1, justifyContent: 'center', alignItems: 'center' }]}
+          style={[mt4]}
           mode="contained"
           disabled={false}
           loading={false}

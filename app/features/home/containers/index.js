@@ -19,7 +19,7 @@ export default function Home({ navigation }) {
   const dispatch = useDispatch();
   const { colors } = useTheme();
   const { py1, pt2, pa2 } = paddings;
-  const { ma1, ma2, my0, mt4, mt6, mx1, my4 } = margins;
+  const { ma1, ma2, my0, mx2, mt6, mx1, my4 } = margins;
   const [loading, setLoading] = useState(false);
   const carouselRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -155,29 +155,18 @@ export default function Home({ navigation }) {
         </Card>
       </View>
 
-      <View
-        style={
-            [mt4], {
-            flex: 1,
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderColor: '#ff0000',
-            borderStyle:'solid'
-          }}>
-        <Button
-          style={[mx1, { flexGrow: 1, justifyContent: 'center', alignItems: 'center' }]}
-          onPress={() => { navigation.navigate('NewRecipe') }}
-          mode="contained"
-          disabled={false}
-          loading={false}
-          dark
-          color={colors.notification}
-        >
-          <Text style={material.body2WhiteObject}>Tarif Paylaş </Text>
-          <CommunityIcon color="white" name="plus" size={20}/>
-        </Button>
-      </View>
+      <Button
+        style={[mx2]}
+        onPress={() => { navigation.navigate('NewRecipe') }}
+        mode="contained"
+        disabled={false}
+        loading={false}
+        dark
+        color={colors.notification}
+      >
+        <Text style={material.body2WhiteObject}>Tarif Paylaş </Text>
+        <CommunityIcon color="white" name="plus" size={20}/>
+      </Button>
 
       <View style={[my4]}>
         <View style={[mx1, { flex: 1, flexDirection: 'row', alignItems: 'center' }]}>
