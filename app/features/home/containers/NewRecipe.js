@@ -21,6 +21,8 @@ const NewRecipe = ({ navigation }) => {
       dateCreated: new Date(),
       user: { uid, email },
       comments: [],
+      likes: 0,
+      usersLiked: [],
     };
 
     firestore()
