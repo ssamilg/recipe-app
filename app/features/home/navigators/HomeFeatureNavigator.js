@@ -17,7 +17,7 @@ function HomeFeatureNavigator() {
         name="Home"
         component={Home}
         options={{
-          title: 'homeStartTitle',
+          title: 'Tariflerim',
           subtitle: 'etUserRegistrationSubject',
           showBackButton: false,
         }}
@@ -26,7 +26,7 @@ function HomeFeatureNavigator() {
         name="NewRecipe"
         component={NewRecipe}
         options={{
-          title: 'New Recipe',
+          title: 'Yeni Tarif',
           showBackButton: false,
         }}
       />
@@ -34,7 +34,7 @@ function HomeFeatureNavigator() {
         name="RecipeDetails"
         component={RecipeDetails}
         options={{
-          title: 'Recipe Details',
+          title: 'Tarif Detayları',
           showBackButton: false,
         }}
       />
