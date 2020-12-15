@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import { Card, TextInput, Button, Title, Paragraph, Caption  } from 'react-native-paper';
 import { paddings, margins } from '~/config/styles';
+// import { useSelector, useDispatch } from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
 import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import RecipeComments from '../components/RecipeComments';
@@ -9,6 +10,7 @@ import NewComment from '../components/NewComment';
 
 const RecipeDetails = ({ route }) => {
   const { recipe } = route.params;
+  // const recipe = useSelector(state => state.mainReducer.recipe);
   const { py1, pa4, px2, pt10 } = paddings;
   const { ma4, my4, mt4, mr2, mt10 } = margins;
 
