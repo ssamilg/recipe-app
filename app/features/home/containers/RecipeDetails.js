@@ -28,10 +28,16 @@ const RecipeDetails = ({ route }) => {
         >
           <Title>{ recipe.recipeTitle }</Title>
 
-          <View style={[my4, { flex: 1, flexDirection: 'row', alignItems: 'center' }]}>
+          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
             <CommunityIcon color="gray" name="account" size={16} style={[mr2]}/>
             <Caption>{recipe.user.email}</Caption>
           </View>
+
+          <View style={[my4, { flex: 1, flexDirection: 'row', alignItems: 'center' }]}>
+            <CommunityIcon color="gray" name="file-document-edit" size={16} style={[mr2]}/>
+            <Paragraph>{ recipe.recipeCategory.name }</Paragraph>
+          </View>
+
 
           <Paragraph>{ recipe.recipeDetails }</Paragraph>
         </Card.Content>
