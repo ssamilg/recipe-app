@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { View, Text, Dimensions, Image, ScrollView } from 'react-native';
 import { Button, Card, TextInput, useTheme } from 'react-native-paper';
 import { material } from 'react-native-typography';
@@ -20,7 +20,13 @@ export default function Home({ navigation }) {
   const { ma1, ma2, my0, mx2, mt6, mx1, my4, ml1 } = margins;
   const [loading, setLoading] = useState(false);
   const [latestRecipes, setLatestRecipe] = React.useState([]);
-  fetchLatestRecipes();
+  const [todaysMenu, setTodaysMenu] = React.useState([]);
+
+  useEffect(() => {
+    fetchLatestRecipes();
+    fetchTodaysMenu();
+  }, [fetchLatestRecipes, fetchTodaysMenu])
+  
 
   const onLogout = () => {
     setLoading(true);
@@ -32,34 +38,69 @@ export default function Home({ navigation }) {
       });
   };
 
-  async function fetchLatestRecipes() {
-    firestore()
-      .collection('Recipes')
-      .limit(10)
-      .orderBy('dateCreated', 'desc')
-      .get()
-      .then((querySnapshot ) => {
+  const fetchLatestRecipes = useCallback(
+    () => {
+      firestore()
+        .collection('Recipes')
+        .limit(10)
+        .orderBy('dateCreated', 'desc')
+        .get()
+        .then((querySnapshot ) => {
+    
+          const tempArray = [];
   
-        const tempArray = [];
-
-        querySnapshot.forEach(documentSnapshot => {
-          const recipe = {
-            id: documentSnapshot.id,
-            ...documentSnapshot.data(),
-          }
-
-          tempArray.push(recipe);
+          querySnapshot.forEach(documentSnapshot => {
+            const recipe = {
+              id: documentSnapshot.id,
+              ...documentSnapshot.data(),
+            }
+  
+            tempArray.push(recipe);
+          });
+  
+          setLatestRecipe(tempArray);
+          
         });
+    },
+    [],
+  );
 
-        setLatestRecipe(tempArray);
-        
-      })
-      .finally(() => {
-        // fetchTodaysRecipe();
-      });
+  const fetchTodaysMenu = useCallback(
+    () => {
+      const todaysMenu = {
+        soup: '',
+        mainMeal: '',
+        sideMeal: '',
+        dessert: '',
+      };
+
+      Object.keys(todaysMenu).forEach((key, index) => {        
+        firestore()
+          .collection('Recipes')
+          .where('recipeCategory.id', '==', index)
+          .limit(5)
+          .get()
+          .then((querySnapshot ) => {
       
+            const tempArray = [];
+    
+            querySnapshot.forEach(documentSnapshot => {
+              const recipe = documentSnapshot.data().recipeTitle;
+              tempArray.push(recipe);
+            });
+            
+            const randomIndex = Math.floor(Math.random() * tempArray.length);
+            todaysMenu[key] = tempArray[randomIndex];
+            console.log(todaysMenu);
 
-  };
+            if (todaysMenu.dessert !== '') {
+              setTodaysMenu(todaysMenu);
+            }
+          });
+      });
+    },
+    [todaysMenu],
+  )
 
   const props = {
     latestRecipes,
@@ -72,28 +113,24 @@ export default function Home({ navigation }) {
         <Card style={[pa2, ma2, { borderWidth: 2, borderColor: '#F48FB1', borderStyle: 'solid' } ]}>
           <Card.Title title="Günün Menüsü" subtitle="Afiyet Olsun..."/>
             <View style={{ display: 'flex', flexDirection: 'row' }}>
-              <CommunityIcon color="black" name="label" size={20}/>
-              <Text style={[ml1]}>lul</Text>
+              <CommunityIcon color="black" name="food-variant" size={20}/>
+              <Text style={[ml1]}>{ todaysMenu.soup }</Text>
             </View>
 
             <View style={{ display: 'flex', flexDirection: 'row' }}>
-              <CommunityIcon color="black" name="label" size={20}/>
-              <Text style={[ml1]}>lel</Text>
+              <CommunityIcon color="black" name="food" size={20}/>
+              <Text style={[ml1]}>{ todaysMenu.mainMeal }</Text>
             </View>
 
             <View style={{ display: 'flex', flexDirection: 'row' }}>
-              <CommunityIcon color="black" name="label" size={20}/>
-              <Text style={[ml1]}>lol</Text>
+              <CommunityIcon color="black" name="food-apple" size={20}/>
+              <Text style={[ml1]}>{ todaysMenu.sideMeal }</Text>
             </View>
 
             <View style={{ display: 'flex', flexDirection: 'row' }}>
-              <CommunityIcon color="black" name="label" size={20}/>
-              <Text style={[ml1]}>lil</Text>
+              <CommunityIcon color="black" name="food-croissant" size={20}/>
+              <Text style={[ml1]}>{ todaysMenu.dessert }</Text>
             </View>
-          {/* <Card.Cover
-            style={{ height: 100, width: '100%', resizeMode: 'contain' }}
-            source={{ uri: todaysRecipe.photoLink }}
-          /> */}
         </Card>
       </View>
 
