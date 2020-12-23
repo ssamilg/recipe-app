@@ -23,9 +23,9 @@ export default function Home({ navigation }) {
   const [todaysMenu, setTodaysMenu] = React.useState([]);
 
   useEffect(() => {
-    fetchTodaysMenu();
+    createTodaysMenu();
     fetchLatestRecipes();
-  }, [fetchLatestRecipes, fetchTodaysMenu])
+  }, [fetchLatestRecipes, createTodaysMenu])
 
   const onLogout = () => {
     setLoading(true);
@@ -64,43 +64,42 @@ export default function Home({ navigation }) {
     [],
   );
 
-  const fetchTodaysMenu = useCallback(
+  const createTodaysMenu = useCallback(
     () => {
-      const todaysMenuTemplate = {
-        soup: '',
-        mainMeal: '',
-        sideMeal: '',
-        dessert: '',
-      };
+      if (checkTheDay()) {
+        const todaysMenuTemplate = {
+          soup: '',
+          mainMeal: '',
+          sideMeal: '',
+          dessert: '',
+          date: new Date(),
+        };
 
-      Object.keys(todaysMenuTemplate).forEach((key, index) => {        
-        firestore()
-          .collection('Recipes')
-          .where('recipeCategory.id', '==', index)
-          .limit(5)
-          .get()
-          .then((querySnapshot ) => {
+        Object.keys(todaysMenuTemplate).forEach((key, index) => {        
+          firestore()
+            .collection('Recipes')
+            .where('recipeCategory.id', '==', index)
+            .limit(5)
+            .get()
+            .then((querySnapshot ) => {
+        
+              const tempArray = [];
       
-            const tempArray = [];
-    
-            querySnapshot.forEach((documentSnapshot) => {
-              const recipe = documentSnapshot.data().recipeTitle;
-              tempArray.push(recipe);
-            });
-            
-            const randomIndex = Math.floor(Math.random() * tempArray.length);
-            todaysMenuTemplate[key] = tempArray[randomIndex];
+              querySnapshot.forEach((documentSnapshot) => {
+                const recipe = documentSnapshot.data().recipeTitle;
+                tempArray.push(recipe);
+              });
+              
+              const randomIndex = Math.floor(Math.random() * tempArray.length);
+              todaysMenuTemplate[key] = tempArray[randomIndex];
 
-            if (todaysMenuTemplate.dessert !== '') {
-              todaysMenuTemplate.date = new Date();
-
-              setTodaysMenu(todaysMenuTemplate);
-              if (checkTheDay()) {
+              if (todaysMenuTemplate.dessert !== '') {
+                setTodaysMenu(todaysMenuTemplate);
                 updateTodaysMenu(todaysMenuTemplate);
               }
-            }
-          });
-      });
+            });
+        });
+      }
     },
     [todaysMenu],
   );
@@ -114,6 +113,10 @@ export default function Home({ navigation }) {
         .get()
         .then((querySnapshot) => {
           querySnapshot.forEach((documentSnapshot) => {
+            if (documentSnapshot.data()) {
+              setTodaysMenu(documentSnapshot.data());
+            }
+
             return (new Date().getDay() > documentSnapshot.data().date.toDate().getDay());
           });
         })
