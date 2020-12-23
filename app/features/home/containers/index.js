@@ -1,23 +1,21 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { View, Text, Dimensions, Image, ScrollView } from 'react-native';
-import { Button, Card, TextInput, useTheme } from 'react-native-paper';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, ScrollView } from 'react-native';
+import { Button, Card, useTheme } from 'react-native-paper';
 import { material } from 'react-native-typography';
-import Carousel, { Pagination } from 'react-native-snap-carousel';
 import auth from '@react-native-firebase/auth';
-import LinearGradient from 'react-native-linear-gradient';
 import { useDispatch } from 'react-redux';
 import * as mainActions from '~/features/main/redux/actions';
 import { LatestRecipes } from '../components';
-import styles from './styles';
 import { paddings, margins } from '~/config/styles';
 import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import firestore from '@react-native-firebase/firestore';
 
 export default function Home({ navigation }) {
+  // 
   const dispatch = useDispatch();
   const { colors } = useTheme();
-  const { py1, pt2, pa2 } = paddings;
-  const { ma1, ma2, my0, mx2, mt6, mx1, my4, ml1 } = margins;
+  const { pa2 } = paddings;
+  const { ma2, mx2, mx1, my4, ml1 } = margins;
   const [loading, setLoading] = useState(false);
   const [latestRecipes, setLatestRecipe] = React.useState([]);
   const [todaysMenu, setTodaysMenu] = React.useState([]);
