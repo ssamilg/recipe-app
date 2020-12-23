@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Card, useTheme, Button } from 'react-native-paper';
 import { paddings, margins } from '~/config/styles';
@@ -22,53 +22,57 @@ const LatestRecipes = (props) => {
     });
   };
 
-  const likeRecipe = (recipe) => {
-    if (!isLiked(recipe)) {      
-      firestore()
-      .collection('Recipes')
-      .doc(recipe.id)
-      .update({
-        likes: firestore.FieldValue.increment(1),
-        usersLiked: firestore.FieldValue.arrayUnion(uid)
-      })
-      .then(() => {
-        console.log('Recipe liked!');
-        recipe.likes += 1;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    } else if (isLiked(recipe)) {
-      firestore()
-      .collection('Recipes')
-      .doc(recipe.id)
-      .get()
-        .then((querySnapshot) => {
-          const tempArray = querySnapshot._data.usersLiked.filter(u => u !== uid);
-
-          firestore()
-          .collection('Recipes')
-          .doc(recipe.id)
-          .update({
-            usersLiked: tempArray,
-            likes: firestore.FieldValue.increment(-1),
-          })
-            .then(() => {
-              recipe.likes -= 1;
-            });
+  const likeRecipe = useCallback(
+    (recipe) => {
+      if (!isLiked(recipe)) {      
+        firestore()
+        .collection('Recipes')
+        .doc(recipe.id)
+        .update({
+          likes: firestore.FieldValue.increment(1),
+          usersLiked: firestore.FieldValue.arrayUnion(uid)
         })
-    }
-  };
-
-  const isLiked = (recipe) => {
+        .then(() => {
+          console.log('Recipe liked!');
+          recipe.likes += 1;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      } else if (isLiked(recipe)) {
+        firestore()
+        .collection('Recipes')
+        .doc(recipe.id)
+        .get()
+          .then((querySnapshot) => {
+            const tempArray = querySnapshot._data.usersLiked.filter(u => u !== uid);
+    
+            firestore()
+            .collection('Recipes')
+            .doc(recipe.id)
+            .update({
+              usersLiked: tempArray,
+              likes: firestore.FieldValue.increment(-1),
+            })
+              .then(() => {
+                recipe.likes -= 1;
+              });
+          })
+      }
+    },
+    []
+  );
+  
+  const isLiked = useCallback(
+    (recipe) => {
     if (recipe.usersLiked.find(u => u === uid)) {
       return true;
     }
 
     return false;
-  };
+  }, [latestRecipeList]);
 
-  const latestRecipeList = props.latestRecipes.map(recipe => 
+  const latestRecipeList = props.latestRecipes.map((recipe) => 
     <View key={recipe.recipeTitle}>
       <Card
         style={[pa4, mx4, my2]}
