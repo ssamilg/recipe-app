@@ -10,16 +10,15 @@ const RecipeComments = ({ recipe }) => {
   const { colors } = useTheme();
   const recipeComments = useSelector(state => state.mainReducer.recipe.comments); 
 
-    const comments = recipeComments.map((comment) => 
+  const comments = recipeComments.map((comment) => 
       <View key={comment.id}>
         <Card
           style={[ my1, mx4]}
         >
           <View style={[mt4, ml4, { flex: 1, flexDirection: 'row', alignItems: 'center' }]}>
             <Caption>{comment.user.email}</Caption>
-            {/* <Caption>date</Caption> */}
           </View>
-          <Card.Title title={comment.commentText} subtitle="{comment.dateCreated}"/>
+          <Card.Title title={comment.commentText} subtitle={comment.dateCreated.toDate().toString().substr(0, 24)}/>
         </Card>
       </View>
     );
