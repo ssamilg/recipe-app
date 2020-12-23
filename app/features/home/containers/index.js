@@ -23,10 +23,9 @@ export default function Home({ navigation }) {
   const [todaysMenu, setTodaysMenu] = React.useState([]);
 
   useEffect(() => {
-    fetchLatestRecipes();
     fetchTodaysMenu();
+    fetchLatestRecipes();
   }, [fetchLatestRecipes, fetchTodaysMenu])
-  
 
   const onLogout = () => {
     setLoading(true);
@@ -67,14 +66,14 @@ export default function Home({ navigation }) {
 
   const fetchTodaysMenu = useCallback(
     () => {
-      const todaysMenu = {
+      const todaysMenuTemplate = {
         soup: '',
         mainMeal: '',
         sideMeal: '',
         dessert: '',
       };
 
-      Object.keys(todaysMenu).forEach((key, index) => {        
+      Object.keys(todaysMenuTemplate).forEach((key, index) => {        
         firestore()
           .collection('Recipes')
           .where('recipeCategory.id', '==', index)
@@ -84,23 +83,58 @@ export default function Home({ navigation }) {
       
             const tempArray = [];
     
-            querySnapshot.forEach(documentSnapshot => {
+            querySnapshot.forEach((documentSnapshot) => {
               const recipe = documentSnapshot.data().recipeTitle;
               tempArray.push(recipe);
             });
             
             const randomIndex = Math.floor(Math.random() * tempArray.length);
-            todaysMenu[key] = tempArray[randomIndex];
-            console.log(todaysMenu);
+            todaysMenuTemplate[key] = tempArray[randomIndex];
 
-            if (todaysMenu.dessert !== '') {
-              setTodaysMenu(todaysMenu);
+            if (todaysMenuTemplate.dessert !== '') {
+              todaysMenuTemplate.date = new Date();
+
+              setTodaysMenu(todaysMenuTemplate);
+              if (checkTheDay()) {
+                updateTodaysMenu(todaysMenuTemplate);
+              }
             }
           });
       });
     },
     [todaysMenu],
-  )
+  );
+  
+  const checkTheDay = useCallback(
+    () => {
+      firestore()
+        .collection('Menus')
+        .limit(1)
+        .orderBy('date', 'desc')
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((documentSnapshot) => {
+            return (new Date().getDay() > documentSnapshot.data().date.toDate().getDay());
+          });
+        })
+    },
+    [],
+  );
+
+  const updateTodaysMenu = useCallback(
+    (todaysMenuTemplate) => {
+      firestore()
+        .collection('Menus')
+        .add(todaysMenuTemplate)
+        .then(() => {
+          console.log('Menu updated');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    [],
+  );
 
   const props = {
     latestRecipes,
