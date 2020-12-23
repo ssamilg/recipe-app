@@ -1,6 +1,4 @@
-/* Home Reducer
- * handles state in the home feature
- */
+// Ana ekranlar icin stateleri duzenleyen reducer
 import createReducer from 'app/lib/createReducer';
 
 const initialState = {};

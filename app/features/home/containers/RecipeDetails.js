@@ -1,20 +1,20 @@
+// Bu dosyada kullanilacak elementler import edildi 
 import React from 'react';
-import { StyleSheet, View, Text, ScrollView } from 'react-native';
-import { Card, TextInput, Button, Title, Paragraph, Caption  } from 'react-native-paper';
+import { View, ScrollView } from 'react-native';
+import { Card, Title, Paragraph, Caption  } from 'react-native-paper';
 import { paddings, margins } from '~/config/styles';
-// import { useSelector, useDispatch } from 'react-redux';
-import firestore from '@react-native-firebase/firestore';
 import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import RecipeComments from '../components/RecipeComments';
 import NewComment from '../components/NewComment';
 
 const RecipeDetails = ({ route }) => {
+  // Local degiskenler tanimlandi
   const { recipe } = route.params;
-  // const recipe = useSelector(state => state.mainReducer.recipe);
-  const { py1, pa4, px2, pt10 } = paddings;
-  const { ma4, my4, mt4, mr2, mt10 } = margins;
+  const { pa4 } = paddings;
+  const { ma4, my4, mt4, mr2 } = margins;
 
   return (
+    // Tarif detayi ekrani tasarimi
     <ScrollView>
       <Card
         style={[pa4, ma4]}
@@ -53,6 +53,5 @@ const RecipeDetails = ({ route }) => {
   );
 };
 
+// Tarif detayi ekrani export ediliyor
 export default RecipeDetails;
-
-const styles = StyleSheet.create({});

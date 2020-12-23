@@ -1,18 +1,10 @@
+// Drawer navigation temel olarak tanimlandı ancak projede ana olarak stack navigator kullanildi
 import React, { useState, useEffect, useRef } from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import HomeFeature from '~/features/home/navigators';
 import { StyleSheet } from 'react-native';
 
 const Drawer = createDrawerNavigator();
-/* function MenuIcon({ icon, iconType }) {
-  const size = 24;
-
-  if (iconType === 'community') {
-    return <CommunityIcon name={icon} size={size} color={color} />;
-  }
-
-  return <Icon name={icon} size={size} color={color} />;
-} */
 
 function MainDrawerNavigator() {
   const [screenOptions] = useState([
@@ -27,11 +19,6 @@ function MainDrawerNavigator() {
   return (
     <Drawer.Navigator
       initialRouteName="Home"
-      /* drawerContent={props => <AppDrawer screens {...props} />} */
-      /* drawerContentOptions={{
-        activeTintColor: primary,
-      }} */
-      /* drawerStyle={styles.initialLoading(isDrawerLoading)} */
       useNativeAnimations={false}>
       {screenOptions.map((screen, index) => {
         return (
@@ -40,9 +27,6 @@ function MainDrawerNavigator() {
             name={screen.name}
             component={screen.component}
             options={{
-              /* drawerIcon: () => (
-                <MenuIcon icon={screen.icon} iconType={screen.iconType} />
-              ), */
               title: screen.title,
             }}
           />
@@ -58,4 +42,5 @@ const styles = StyleSheet.create({
   }),
 });
 
+// Drawer navigation export edildi
 export default MainDrawerNavigator;

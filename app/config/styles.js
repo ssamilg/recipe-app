@@ -1,8 +1,6 @@
-/*
- * Provides universal color configs used in the app.
- * Provides universal fonts used in the app.
- */
+//Projede kullanilacak renkler ve margin ve padding onayarlari tanimlandi
 export const AppStyles = {
+  // renkler
   colors: {
     primary: '#C9355A',
     secondary: '#424242',
@@ -22,13 +20,10 @@ export const AppStyles = {
     tealLighten5: '#E0F2F1',
     tealLighten1: '#26A69A',
   },
-  fonts: {
-    // FONT_REGULAR: 'Roboto-Regular',
-    // FONT_MEDIUM: 'Roboto-Medium'
-  },
 };
 
-export const paddings = {
+// paddingler
+  export const paddings = {
   pa0: {
     padding: 0,
   },
@@ -262,6 +257,7 @@ export const paddings = {
   },
 };
 
+// marginler
 export const margins = {
   ma0: {
     margin: 0,

@@ -8,6 +8,8 @@ const initialState = {
   recipe: {},
 };
 
+// State yonetimi icin reducerlar tanimlandi
+
 export const mainReducer = createReducer(initialState, {
   [types.SET_USER_CREDENTIALS](draft, action) {
     draft.user = action.user;

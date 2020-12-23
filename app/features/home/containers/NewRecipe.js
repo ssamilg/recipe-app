@@ -1,20 +1,22 @@
+// Bu dosyada kullanilacak elementler import edildi 
 import React from 'react';
-import { StyleSheet, View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { Card, TextInput, Button, Dialog, Portal } from 'react-native-paper';
 import { paddings, margins } from '~/config/styles';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
-import { color } from 'react-native-reanimated';
 
 const NewRecipe = ({ navigation }) => {
-  const { pa3, pa4, px2, py3 } = paddings;
-  const { ma4, my0, mt4, mt6, ma1 } = margins;
+  // Local degiskenler tanimlandi
+  const { pa3, pa4 } = paddings;
+  const { ma4, mt4, ma1 } = margins;
   const [photoLink, setPhotoLink] = React.useState('');
   const [recipeTitle, setRecipeTitle] = React.useState('');
   const [recipeCategory, setRecipeCategory] = React.useState({ id: -1, name: 'Tarif kategorisi seçiniz' });
   const [recipeDetails, setRecipeDetails] = React.useState('');
   const { email, uid } = auth().currentUser._user;
   const [visible, setVisible] = React.useState(false);
+  // Tarif categorisi listesi local olarak tanimlandi
   const [recipeCategoryList, setRecipeCategoryList] = React.useState([
     {
       id: 0,
@@ -34,14 +36,17 @@ const NewRecipe = ({ navigation }) => {
     },
   ]);
 
+  // Kategori secimi icin dialog methodlari
   const showDialog = () => setVisible(true);
   const hideDialog = () => setVisible(false);
 
+  // Kategori secimi yaptigimiz method
   const selectCategory = (category) => {
     setRecipeCategory(category);
     setVisible(false)
   };
 
+  // Bilgisi girilen tarifi db'ye kaydeden method
   const shareRecipe = () => {
     const newRecipe = {
       photoLink,
@@ -68,6 +73,7 @@ const NewRecipe = ({ navigation }) => {
   }
 
   const recipeCategories = recipeCategoryList.map(category => 
+    // Kategori secimi ekranindaki kategori listesi tasarimi
     <View
       key={category.id}
     >
@@ -86,6 +92,7 @@ const NewRecipe = ({ navigation }) => {
   );
 
   return (
+    // Yeni tarif ekrani tasarimi
     <ScrollView>
       <Card
         style={[pa4, ma4]}
@@ -161,6 +168,5 @@ const NewRecipe = ({ navigation }) => {
   );
 };
 
+// Yeni tarif ekrani export ediliyor
 export default NewRecipe;
-
-const styles = StyleSheet.create({});

@@ -11,7 +11,6 @@ import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import firestore from '@react-native-firebase/firestore';
 
 export default function Home({ navigation }) {
-  // 
   const dispatch = useDispatch();
   const { colors } = useTheme();
   const { pa2 } = paddings;

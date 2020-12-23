@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { TextInput, HelperText } from 'react-native-paper';
 import PropTypes from 'prop-types';
 
+// Login ve Register ekrani için kullanacagimiz componenti tasarladik 
 const GpTextInput = props => {
   const {
     style,
@@ -27,6 +28,7 @@ const GpTextInput = props => {
   }, [errorMessage, isBlurred, required, value]);
 
   return (
+    // Componentin tasarimini yaptik 
     <View style={style}>
       <TextInput
         style={inputStyle}
@@ -45,6 +47,7 @@ const GpTextInput = props => {
   );
 };
 
+// Componentin alacagi proplari tanimladik 
 GpTextInput.propTypes = {
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   inputStyle: PropTypes.object,
@@ -57,4 +60,5 @@ GpTextInput.defaultProps = {
   required: false,
 };
 
+// Componenti export ettik 
 export default GpTextInput;
