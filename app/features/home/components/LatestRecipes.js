@@ -3,7 +3,7 @@ import React, { useCallback } from 'react';
 import { Text, View } from 'react-native';
 import { Card } from 'react-native-paper';
 import { paddings, margins } from '~/config/styles';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { refreshRecipe } from '~/features/main/redux/actions';
 import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import firestore from '@react-native-firebase/firestore';
