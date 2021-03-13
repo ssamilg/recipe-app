@@ -3,7 +3,7 @@ import React, { useCallback } from 'react';
 import { Text, View } from 'react-native';
 import { Card } from 'react-native-paper';
 import { paddings, margins } from '~/config/styles';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { refreshRecipe } from '~/features/main/redux/actions';
 import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import firestore from '@react-native-firebase/firestore';
@@ -15,10 +15,7 @@ const LatestRecipes = (props) => {
   const { pa4 } = paddings;
   const { mx4, my2, mr1 } = margins;
   // Giris yapilan kullanici id'si cekildi
-  let uid = '';
-  if (auth().currentUser) {
-    uid = auth().currentUser._user.uid;
-  }
+  const { uid } = auth().currentUser._user;
 
   // Tarif detayina gitmemizi saglayan navigasyon methodu
   const navigateToRecipeDetails = (recipe) => {
