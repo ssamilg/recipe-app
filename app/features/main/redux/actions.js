@@ -26,3 +26,9 @@ export function logout() {
     type: types.ON_LOGOUT,
   };
 }
+export function refreshRecipe(payload) {
+  return {
+    type: types.REFRESH_RECIPE,
+    payload,
+  };
+}

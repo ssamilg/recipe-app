@@ -1,8 +1,8 @@
 import auth from '@react-native-firebase/auth';
 
-export function loginThunk(username, password) {
+export function loginThunk(email, password) {
   return async function(dispatch, getState) {
-    return auth().signInWithEmailAndPassword(username, password);
+    return auth().signInWithEmailAndPassword(email, password);
   };
 }
 

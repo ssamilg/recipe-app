@@ -1,3 +1,3 @@
-import LatestOrders from './LatestOrders';
+import LatestRecipes from './LatestRecipes';
 
-export { LatestOrders };
+export { LatestRecipes };

@@ -37,14 +37,15 @@ function App() {
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator headerMode="none">
         {isLoggedIn ? (
-          <Stack.Screen name="Main" component={Main} />
+          <>
+            <Stack.Screen name="Main" component={Main} />
+          </>
         ) : (
           <>
             <Stack.Screen
               name="Login"
               component={Login}
               options={{
-                // When logging out, a pop animation feels intuitive
                 animationTypeForReplace: isLoggedIn ? 'push' : 'pop',
               }}
             />

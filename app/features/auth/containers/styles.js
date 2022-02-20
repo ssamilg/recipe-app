@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
   flex: { flex: 1 },
   cardWrapper: { flexShrink: 1, width: '100%' },
   cardHeaderImage: {
+    backgroundColor: '#fff',
     height: 160,
     width: '100%',
     resizeMode: 'contain',

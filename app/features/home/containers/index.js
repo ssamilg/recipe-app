@@ -1,49 +1,28 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, Dimensions, Image } from 'react-native';
-import { Button, Card, TextInput, useTheme } from 'react-native-paper';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, ScrollView } from 'react-native';
+import { Button, Card, useTheme } from 'react-native-paper';
 import { material } from 'react-native-typography';
-import Carousel, { Pagination } from 'react-native-snap-carousel';
 import auth from '@react-native-firebase/auth';
-import LinearGradient from 'react-native-linear-gradient';
 import { useDispatch } from 'react-redux';
 import * as mainActions from '~/features/main/redux/actions';
-import { LatestOrders } from '../components';
-import styles from './styles';
+import { LatestRecipes } from '../components';
 import { paddings, margins } from '~/config/styles';
+import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import firestore from '@react-native-firebase/firestore';
 
-const windowWidth = Dimensions.get('window').width;
-const orders = [
-  //
-];
-
-export default function Home() {
+export default function Home({ navigation }) {
   const dispatch = useDispatch();
   const { colors } = useTheme();
-  const { py1, py2, px2, py3 } = paddings;
-  const { ma1, my0, mt4, mt6, mx1 } = margins;
+  const { pa2 } = paddings;
+  const { ma2, mx2, mx1, my4, ml1 } = margins;
   const [loading, setLoading] = useState(false);
-  const carouselRef = useRef(null);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [entries, setEntries] = useState([
-    {
-      illustration: 'https://i.imgur.com/UYiroysl.jpg',
-    },
-    {
-      illustration: 'https://i.imgur.com/UPrs1EWl.jpg',
-    },
-    {
-      illustration: 'https://i.imgur.com/MABUbpDl.jpg',
-    },
-    {
-      illustration: 'https://i.imgur.com/KZsmUi2l.jpg',
-    },
-    {
-      illustration: 'https://i.imgur.com/2nCt3Sbl.jpg',
-    },
-    {
-      illustration: 'https://i.imgur.com/lceHsT6l.jpg',
-    },
-  ]);
+  const [latestRecipes, setLatestRecipe] = React.useState([]);
+  const [todaysMenu, setTodaysMenu] = React.useState([]);
+
+  useEffect(() => {
+    createTodaysMenu();
+    fetchLatestRecipes();
+  }, [fetchLatestRecipes, createTodaysMenu])
 
   const onLogout = () => {
     setLoading(true);
@@ -55,80 +34,170 @@ export default function Home() {
       });
   };
 
-  const RenderItem = ({ item }) => {
-    console.log();
-    return (
-      <View style={[ma1, { borderRadius: 15, overflow: 'hidden' }]}>
-        <Image
-          style={{ height: 200, width: '100%', resizeMode: 'stretch' }}
-          source={{
-            uri: item.illustration,
-          }}
-        />
-      </View>
-    );
+  const fetchLatestRecipes = useCallback(
+    () => {
+      firestore()
+        .collection('Recipes')
+        .limit(10)
+        .orderBy('dateCreated', 'desc')
+        .get()
+        .then((querySnapshot ) => {
+    
+          const tempArray = [];
+  
+          querySnapshot.forEach(documentSnapshot => {
+            const recipe = {
+              id: documentSnapshot.id,
+              ...documentSnapshot.data(),
+            }
+  
+            tempArray.push(recipe);
+          });
+  
+          setLatestRecipe(tempArray);
+          
+        });
+    },
+    [],
+  );
+
+  const createTodaysMenu = useCallback(
+    () => {
+      if (checkTheDay()) {
+        const todaysMenuTemplate = {
+          soup: '',
+          mainMeal: '',
+          sideMeal: '',
+          dessert: '',
+          date: new Date(),
+        };
+
+        Object.keys(todaysMenuTemplate).forEach((key, index) => {        
+          firestore()
+            .collection('Recipes')
+            .where('recipeCategory.id', '==', index)
+            .limit(5)
+            .get()
+            .then((querySnapshot ) => {
+        
+              const tempArray = [];
+      
+              querySnapshot.forEach((documentSnapshot) => {
+                const recipe = documentSnapshot.data().recipeTitle;
+                tempArray.push(recipe);
+              });
+              
+              const randomIndex = Math.floor(Math.random() * tempArray.length);
+              todaysMenuTemplate[key] = tempArray[randomIndex];
+
+              if (todaysMenuTemplate.dessert !== '') {
+                setTodaysMenu(todaysMenuTemplate);
+                updateTodaysMenu(todaysMenuTemplate);
+              }
+            });
+        });
+      }
+    },
+    [todaysMenu],
+  );
+  
+  const checkTheDay = useCallback(
+    () => {
+      firestore()
+        .collection('Menus')
+        .limit(1)
+        .orderBy('date', 'desc')
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((documentSnapshot) => {
+            if (documentSnapshot.data()) {
+              setTodaysMenu(documentSnapshot.data());
+            }
+
+            return (new Date().getDay() > documentSnapshot.data().date.toDate().getDay());
+          });
+        })
+    },
+    [],
+  );
+
+  const updateTodaysMenu = useCallback(
+    (todaysMenuTemplate) => {
+      firestore()
+        .collection('Menus')
+        .add(todaysMenuTemplate)
+        .then(() => {
+          console.log('Menu updated');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    [],
+  );
+
+  const props = {
+    latestRecipes,
+    navigation,
   };
 
   return (
-    <View>
-      <LinearGradient colors={['#BDBDBD', '#FFF']} style={[py2]}>
-        <Carousel
-          ref={carouselRef}
-          data={entries}
-          renderItem={RenderItem}
-          sliderWidth={windowWidth}
-          itemWidth={windowWidth - 64}
-          onSnapToItem={index => setActiveIndex(index)}
-        />
-        <Pagination
-          dotsLength={entries.length}
-          activeDotIndex={activeIndex}
-          containerStyle={[py1, my0]}
-          dotStyle={{
-            width: 8,
-            height: 8,
-            borderRadius: 4,
-            marginHorizontal: 4,
-            backgroundColor: '#212121',
-          }}
-          inactiveDotOpacity={0.4}
-          inactiveDotScale={0.6}
-        />
-      </LinearGradient>
+    <ScrollView>
+      <View>
+        <Card style={[pa2, ma2, { borderWidth: 2, borderColor: '#F48FB1', borderStyle: 'solid' } ]}>
+          <Card.Title title="Günün Menüsü" subtitle="Afiyet Olsun..."/>
+            <View style={{ display: 'flex', flexDirection: 'row' }}>
+              <CommunityIcon color="black" name="food-variant" size={20}/>
+              <Text style={[ml1]}>{ todaysMenu.soup }</Text>
+            </View>
 
-      <View style={[mt6]}>
-        <Card style={[px2, py3]} theme={{ roundness: 0 }}>
-          <TextInput
-            label="Search restaurant or food"
-            right={
-              <TextInput.Icon
-                name="magnify"
-                color={colors.primary}
-                forceTextInputFocus={false}
-              />
-            }
-            theme={{
-              colors: { underlineColor: 'transparent' },
-            }}
-            style={{
-              backgroundColor: 'white',
-              borderBottomColor: 'white',
-              viewStyle: {
-                borderWidth: 0,
-              },
-              underlineColor: 'transparent',
-            }}
-            selectionColor="transparent"
-            underlineColor="transparent"
-            underlineColorAndroid={'rgba(0,0,0,0)'}
-          />
+            <View style={{ display: 'flex', flexDirection: 'row' }}>
+              <CommunityIcon color="black" name="food" size={20}/>
+              <Text style={[ml1]}>{ todaysMenu.mainMeal }</Text>
+            </View>
+
+            <View style={{ display: 'flex', flexDirection: 'row' }}>
+              <CommunityIcon color="black" name="food-apple" size={20}/>
+              <Text style={[ml1]}>{ todaysMenu.sideMeal }</Text>
+            </View>
+
+            <View style={{ display: 'flex', flexDirection: 'row' }}>
+              <CommunityIcon color="black" name="food-croissant" size={20}/>
+              <Text style={[ml1]}>{ todaysMenu.dessert }</Text>
+            </View>
         </Card>
       </View>
 
-      <View style={[mt4]}>
-        <Text style={[mx1, material.display1]}>Latest Orders</Text>
-        <LatestOrders orders={orders} />
+      <Button
+        style={[mx2]}
+        onPress={() => { navigation.navigate('NewRecipe') }}
+        mode="contained"
+        disabled={false}
+        loading={false}
+        dark
+        color={colors.notification}
+      >
+        <Text style={material.body2WhiteObject}>Tarif Paylaş </Text>
+        <CommunityIcon color="white" name="plus" size={20}/>
+      </Button>
+
+      <View style={[my4]}>
+        <View style={[mx1, { flex: 1, flexDirection: 'row', alignItems: 'center' }]}>
+          <Text style={[mx1, material.display1, { flexGrow: 1 }]}>Beğenilen Tarifler</Text>
+          <CommunityIcon
+            color="black"
+            name="refresh"
+            size={28}
+            style={[mx1]}
+            onPress={() => fetchLatestRecipes()}
+          />
+        </View>
+
+        <View>
+          <LatestRecipes {...props}/>
+        </View>
       </View>
+
       <Button
         loading={loading}
         icon="logout"
@@ -136,6 +205,6 @@ export default function Home() {
         onPress={onLogout}>
         Logout
       </Button>
-    </View>
+    </ScrollView>
   );
 }

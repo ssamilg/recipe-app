@@ -1,7 +1,3 @@
-/*
- * Provides universal color configs used in the app.
- * Provides universal fonts used in the app.
- */
 export const AppStyles = {
   colors: {
     primary: '#C9355A',
@@ -22,13 +18,9 @@ export const AppStyles = {
     tealLighten5: '#E0F2F1',
     tealLighten1: '#26A69A',
   },
-  fonts: {
-    // FONT_REGULAR: 'Roboto-Regular',
-    // FONT_MEDIUM: 'Roboto-Medium'
-  },
 };
 
-export const paddings = {
+  export const paddings = {
   pa0: {
     padding: 0,
   },

@@ -17,11 +17,15 @@ export default function Register({ navigation }) {
     email: '',
     password: '',
   });
+  const [userData, setUserData] = useState({
+    name: '',
+    surname: '',
+  });
   const { ma2, my2, my1 } = margins;
 
   const register = () => {
     if (!credentials.email || !credentials.password) {
-      return setErrorMessage('Email and password fields are required');
+      return setErrorMessage('Email ve sifre alanlari zorunludur');
     }
 
     setLoading(true);
@@ -32,11 +36,11 @@ export default function Register({ navigation }) {
       })
       .catch(error => {
         if (error.code === 'auth/email-already-ın-use') {
-          setErrorMessage('That email address is already in use!');
+          setErrorMessage('Email adresi zaten kullanılıyor');
         } else if (error.code === 'auth/invalid-email') {
-          setErrorMessage('That email address is invalid!');
+          setErrorMessage('Email adresi yanlış !');
         } else if (error.code === 'auth/weak-password') {
-          setErrorMessage('Password should be at least 6 characters');
+          setErrorMessage('Şifre en az 6 karakter olmalı');
         } else {
           setErrorMessage(error.userInfo.message);
         }
@@ -52,12 +56,12 @@ export default function Register({ navigation }) {
       <View style={[ma2, styles.container]}>
         <Card style={styles.cardWrapper}>
           <Image
-            source={require('~/assets/fast-food.png')}
+            source={require('~/assets/chef-hat.png')}
             style={styles.cardHeaderImage}
           />
           <Card.Content>
             <View style={{ alignItems: 'center' }}>
-              <Text style={[my2, material.display1]}>Order Man</Text>
+              {/* <Text style={[my2, material.display1]}>Tariflerim</Text> */}
               <Text style={[material.body2, styles.errorText]}>
                 {errorMessage}
               </Text>
@@ -75,12 +79,34 @@ export default function Register({ navigation }) {
             <GpTextInput
               style={[my1]}
               mode="outlined"
-              label="Password"
+              label="Şifre"
               value={credentials.password}
               secureTextEntry
               required
               onChangeText={password =>
                 setCredentials({ ...credentials, password })
+              }
+            />
+
+            <GpTextInput
+              style={[my1]}
+              mode="outlined"
+              label="İsim"
+              value={userData.name}
+              required
+              onChangeText={name =>
+                setUserData({ ...userData, name })
+              }
+            />
+
+            <GpTextInput
+              style={[my1]}
+              mode="outlined"
+              label="Soyisim"
+              value={userData.surname}
+              required
+              onChangeText={surname =>
+                setUserData({ ...userData, surname })
               }
             />
 
@@ -90,10 +116,10 @@ export default function Register({ navigation }) {
               mode="contained"
               disabled={loading}
               onPress={() => register()}>
-              Register
+              Kayıt Ol
             </Button>
             <Button style={my1} onPress={() => navigation.navigate('Login')}>
-              Login
+              Giriş Yap
             </Button>
           </Card.Content>
         </Card>
