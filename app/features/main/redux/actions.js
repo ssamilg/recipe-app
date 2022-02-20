@@ -1,5 +1,4 @@
 import * as types from './types';
-// State yonetim reducer aksiyonlari tanimlandi
 
 export function setUserCredentials(user) {
   return {

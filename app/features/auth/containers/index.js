@@ -1,4 +1,3 @@
-// Bu dosyada kullanilacak elementler import edildi 
 import React, { useState } from 'react';
 import { View, Image, KeyboardAvoidingView } from 'react-native';
 import { Text, TextInput, Card, Button } from 'react-native-paper';
@@ -9,38 +8,29 @@ import { margins } from '~/config/styles';
 import { material } from 'react-native-typography';
 
 export default function Login({ navigation }) {
-  // Local degiskenler tanimlandi
   const dispatch = useDispatch();
   const [errorMessage, setErrorMessage] = useState('');
   const [loginProcessing, setLoginProcessing] = useState(false);
-  // Loginde kullanilacak form bilgileri bu degiskende tutulacak
   const [credentials, setCredentials] = useState({
     email: '',
     password: '',
   });
   const { ma2, my2, my1 } = margins;
 
-  // Login methodu yazildi
   const login = async () => {
-    // Form bilgisi kontrol ediliyor
     if (!credentials.email || !credentials.password) {
       return setErrorMessage('Email ve sifre alanlari zorunludur');
     }
 
-    // Login islemi icin loader degiskenini baslattik
     setLoginProcessing(true);
 
-    // Dispatch kullanarak thunkActions dosyasinda tanimladigimiz method ile login islemi yaptik
     dispatch(loginThunk(credentials.email, credentials.password))
       .then(() => {
-      // Login islemi icin loader degiskenini durdurduk
         setLoginProcessing(false);
       })
-      // Hata durumunu yakalamak icin yazdigimiz kod blogu
       .catch(error => {
         console.log(error);
         if (error) {
-          // Hata mesajini gosterdigimiz degisken
           setErrorMessage('E-mail ya da şifre yanlış !');
           setLoginProcessing(false);
         }
@@ -48,7 +38,6 @@ export default function Login({ navigation }) {
   };
 
   return (
-    // Login sayfasi tasarimi
     <KeyboardAvoidingView style={styles.flex}>
       <View style={[ma2, styles.container]}>
         <Card style={styles.cardWrapper}>

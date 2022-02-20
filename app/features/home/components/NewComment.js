@@ -1,4 +1,3 @@
-// Bu dosyada kullanilacak elementler import edildi 
 import React from 'react';
 import { View, Text } from 'react-native';
 import { Card, TextInput, Button } from 'react-native-paper';
@@ -10,15 +9,12 @@ import { refreshRecipe } from '~/features/main/redux/actions';
 import { refreshRecipeById } from '../../main/redux/thunkActions';
 
 const NewComment = ({ recipe }) => {
-  // Local degiskenler tanimlandi
   const dispatch = useDispatch();
   const { pa4 } = paddings;
   const { ma4, mt4 } = margins;
   const [commentText, setCommentText] = React.useState('');
-  // Giris yapilan kullanici bilgisi cekildi
   const { email, uid } = auth().currentUser._user;
 
-  // Yapilan yorumu db'ye ekleyen method
   const shareComment = () => {
     const newComment = {
       id: `${uid}${recipe.id}${new Date().toString()}`,
@@ -42,7 +38,6 @@ const NewComment = ({ recipe }) => {
       })
       .finally(() => {
         setCommentText('');
-        // Dispatch araciligiyla id ile yorum yapilan tarif bilgisi guncelleniyor
         dispatch(refreshRecipeById(recipe.id))
           .then((recipe) => {
             dispatch(refreshRecipe(recipe._data));
@@ -51,7 +46,6 @@ const NewComment = ({ recipe }) => {
   }
 
   return (
-    // Yeni yorum componenti tasarimi
     <View>
       <Card
         style={[pa4, ma4]}
@@ -80,5 +74,4 @@ const NewComment = ({ recipe }) => {
   );
 };
 
-// Yeni yorum componenti export edildi
 export default NewComment;

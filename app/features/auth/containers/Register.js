@@ -1,4 +1,3 @@
-// Bu dosyada kullanilacak elementler import edildi 
 import React, { useState } from 'react';
 import { View, Image, KeyboardAvoidingView, Platform } from 'react-native';
 import { Text, Card, Button } from 'react-native-paper';
@@ -11,11 +10,9 @@ import { margins } from '~/config/styles';
 import { material } from 'react-native-typography';
 
 export default function Register({ navigation }) {
-  // Local degiskenler tanimlandi
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  // Registerda kullanilacak form bilgileri bu degiskende tutulacak
   const [credentials, setCredentials] = useState({
     email: '',
     password: '',
@@ -26,24 +23,18 @@ export default function Register({ navigation }) {
   });
   const { ma2, my2, my1 } = margins;
 
-  // Register methodu yazildi
   const register = () => {
-    // Form bilgisi kontrol ediliyor
     if (!credentials.email || !credentials.password) {
       return setErrorMessage('Email ve sifre alanlari zorunludur');
     }
 
-    // Register islemi icin loader degiskenini baslattik
     setLoading(true);
 
-    // Dispatch kullanarak thunkActions dosyasinda tanimladigimiz method ile register islemi yaptik
     dispatch(registerThunk(credentials.email, credentials.password))
       .then(() => {
-        // Yine dispatch kullanarak yeni kullaniciyi kaydedecek methodu calistirdik
         dispatch(setIsNewUser(true));
       })
       .catch(error => {
-        // Hata durumlarini kontrol edip hataya gore mesaj yazdirdik
         if (error.code === 'auth/email-already-ın-use') {
           setErrorMessage('Email adresi zaten kullanılıyor');
         } else if (error.code === 'auth/invalid-email') {
@@ -55,12 +46,10 @@ export default function Register({ navigation }) {
         }
       });
 
-    // Register islemi icin loader degiskenini durdurduk
     setLoading(false);
   };
 
   return (
-    // Register sayfasi tasarimi
     <KeyboardAvoidingView
       style={styles.flex}
       behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>

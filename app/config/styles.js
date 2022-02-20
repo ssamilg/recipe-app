@@ -1,6 +1,4 @@
-//Projede kullanilacak renkler ve margin ve padding onayarlari tanimlandi
 export const AppStyles = {
-  // renkler
   colors: {
     primary: '#C9355A',
     secondary: '#424242',
@@ -22,7 +20,6 @@ export const AppStyles = {
   },
 };
 
-// paddingler
   export const paddings = {
   pa0: {
     padding: 0,
@@ -257,7 +254,6 @@ export const AppStyles = {
   },
 };
 
-// marginler
 export const margins = {
   ma0: {
     margin: 0,

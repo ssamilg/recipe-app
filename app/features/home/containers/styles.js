@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native';
 
-// Ana ekranlarda kullanilacak stylelar tanimlandi
 const styles = StyleSheet.create({
   container: {
     flex: 1,

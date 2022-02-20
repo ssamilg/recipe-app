@@ -1,7 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { AppStyles } from '~/config/styles';
 
-// Authentication ekranlarinda kullanilacak stylelar tanimlandi
 const styles = StyleSheet.create({
   container: {
     flex: 1,

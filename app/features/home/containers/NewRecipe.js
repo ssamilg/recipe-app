@@ -1,4 +1,3 @@
-// Bu dosyada kullanilacak elementler import edildi 
 import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import { Card, TextInput, Button, Dialog, Portal } from 'react-native-paper';
@@ -7,7 +6,6 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
 const NewRecipe = ({ navigation }) => {
-  // Local degiskenler tanimlandi
   const { pa3, pa4 } = paddings;
   const { ma4, mt4, ma1 } = margins;
   const [photoLink, setPhotoLink] = React.useState('');
@@ -16,7 +14,6 @@ const NewRecipe = ({ navigation }) => {
   const [recipeDetails, setRecipeDetails] = React.useState('');
   const { email, uid } = auth().currentUser._user;
   const [visible, setVisible] = React.useState(false);
-  // Tarif categorisi listesi local olarak tanimlandi
   const [recipeCategoryList, setRecipeCategoryList] = React.useState([
     {
       id: 0,
@@ -36,17 +33,14 @@ const NewRecipe = ({ navigation }) => {
     },
   ]);
 
-  // Kategori secimi icin dialog methodlari
   const showDialog = () => setVisible(true);
   const hideDialog = () => setVisible(false);
 
-  // Kategori secimi yaptigimiz method
   const selectCategory = (category) => {
     setRecipeCategory(category);
     setVisible(false)
   };
 
-  // Bilgisi girilen tarifi db'ye kaydeden method
   const shareRecipe = () => {
     const newRecipe = {
       photoLink,
@@ -73,7 +67,6 @@ const NewRecipe = ({ navigation }) => {
   }
 
   const recipeCategories = recipeCategoryList.map(category => 
-    // Kategori secimi ekranindaki kategori listesi tasarimi
     <View
       key={category.id}
     >
@@ -92,7 +85,6 @@ const NewRecipe = ({ navigation }) => {
   );
 
   return (
-    // Yeni tarif ekrani tasarimi
     <ScrollView>
       <Card
         style={[pa4, ma4]}
@@ -168,5 +160,4 @@ const NewRecipe = ({ navigation }) => {
   );
 };
 
-// Yeni tarif ekrani export ediliyor
 export default NewRecipe;

@@ -1,4 +1,3 @@
-// Ana ekranlar icin stateleri duzenleyen reducer
 import createReducer from 'app/lib/createReducer';
 
 const initialState = {};

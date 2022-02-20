@@ -1,4 +1,3 @@
-// Drawer navigation temel olarak tanimlandı ancak projede ana olarak stack navigator kullanildi
 import React, { useState, useEffect, useRef } from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import HomeFeature from '~/features/home/navigators';
@@ -42,5 +41,4 @@ const styles = StyleSheet.create({
   }),
 });
 
-// Drawer navigation export edildi
 export default MainDrawerNavigator;
