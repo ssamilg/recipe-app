@@ -1,3 +1,7 @@
+# This is an archived project.
+
+-------------------------------------------
+
 # 🚀 React Native Feature Boilerplate - April 2020
 
 [![React Native](https://img.shields.io/badge/React%20Native-v0.62.2-green.svg)](https://facebook.github.io/react-native/)
